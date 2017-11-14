@@ -4,7 +4,8 @@ var closeCreatePostModalButton = document.querySelector('#close-create-post-moda
 var sharedMomentsArea = document.querySelector('#shared-moments');
 
 function openCreatePostModal() {
-  createPostArea.style.display = 'block';
+  createPostArea.style.transform = 'translateY(0)';
+
   if (deferredPrompt) {
     deferredPrompt.prompt();
 
@@ -32,14 +33,14 @@ function openCreatePostModal() {
 }
 
 function closeCreatePostModal() {
-  createPostArea.style.display = 'none';
+  createPostArea.style.transform = 'translateY(100vh)';
 }
 
 shareImageButton.addEventListener('click', openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
 
-// Currently not in use, allow to save assets in cache on demand otherwise
+// Currently not in use, allows to save assets in cache on demand otherwise
 function onSaveButtonClicked(event) {
   console.log('clicked');
 
@@ -66,7 +67,6 @@ function createCard(data) {
   cardTitle.className = 'mdl-card__title';
   cardTitle.style.backgroundImage = 'url(' + data.image + ')';
   cardTitle.style.backgroundSize = 'cover';
-  cardTitle.style.height = '180px';
 
   cardWrapper.appendChild(cardTitle);
 
@@ -83,7 +83,7 @@ function createCard(data) {
 
   // var cardSaveButton = document.createElement('button');
   // cardSaveButton.textContent = 'Save';
-  // cardSaveButton.addEventListener('click', onSaveButtonClicked)
+  // cardSaveButton.addEventListener('click', onSaveButtonClicked);
 
   //cardSupportingText.appendChild(cardSaveButton);
 
@@ -114,8 +114,6 @@ fetch(url)
     for (var key in data) {
       dataArray.push(data[key]);
     }
-
-    clearCards();
     updateUI(dataArray);
   });
 

@@ -30,7 +30,7 @@ function clearAllData(st) {
       var store = tx.objectStore(st);
       store.clear();
       return tx.complete;
-    })
+    });
 }
 
 function deleteItemFromData(st, id) {
