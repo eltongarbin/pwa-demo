@@ -1,13 +1,14 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-var CACHE_STATIC_NAME = 'static-v24';
-var CACHE_DYNAMIC_NAME = 'dynamic-v2';
+var CACHE_STATIC_NAME = 'static-v43';
+var CACHE_DYNAMIC_NAME = 'dynamic-v4';
 var STATIC_FILES = [
   '/',
   '/index.html',
   '/offline.html',
   '/src/js/app.js',
+  '/src/js/utility.js',
   '/src/js/feed.js',
   '/src/js/idb.js',
   '/src/js/promise.js',
@@ -80,11 +81,10 @@ self.addEventListener('fetch', function (event) {
     event.respondWith(
       fetch(event.request)
         .then(function (res) {
-          var cloneRes = res.clone();
-
+          var clonedRes = res.clone();
           clearAllData('posts')
             .then(function () {
-              return cloneRes.json();
+              return clonedRes.json();
             })
             .then(function (data) {
               for (var key in data) {
@@ -209,18 +209,17 @@ self.addEventListener('sync', function (event) {
       readAllData('sync-posts')
         .then(function (data) {
           for (var dt of data) {
+            var postData = new FormData();
+            postData.append('id', dt.id);
+            postData.append('title', dt.title);
+            postData.append('location', dt.location);
+            postData.append('rawLocationLat', dt.rawLocation.lat);
+            postData.append('rawLocationLng', dt.rawLocation.lng);
+            postData.append('file', dt.picture, dt.id + '.png');
+
             fetch('https://us-central1-pwagram-90631.cloudfunctions.net/storePostData', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              body: JSON.stringify({
-                id: dt.id,
-                title: dt.title,
-                location: dt.location,
-                image: 'https://firebasestorage.googleapis.com/v0/b/pwagram-90631.appspot.com/o/sf-boat.jpg?alt=media&token=bc3dce66-1ddc-4554-b8d0-1abc2cba9f6a'
-              })
+              body: postData
             }).then(function (res) {
               console.log('Sent data', res);
               if (res.ok) {
@@ -260,9 +259,9 @@ self.addEventListener('notificationclick', function (event) {
             client.navigate(notification.data.url);
             client.focus();
           } else {
-            client.openWindow(notification.data.url);
+            clients.openWindow(notification.data.url);
           }
-          notification.clone();
+          notification.close();
         })
     );
   }
