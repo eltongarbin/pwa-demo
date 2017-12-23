@@ -1,2 +1,8 @@
 .idea
 node_modules
+public/src/js/utility.min.js
+public/src/js/app.min.js
+public/src/js/feed.min.js
+public/src/js/fetch.min.js
+public/src/js/idb.min.js
+public/src/js/promise.min.js
