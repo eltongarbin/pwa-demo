@@ -82,7 +82,7 @@ workboxSW.precache([
   },
   {
     "url": "offline.html",
-    "revision": "e8e8a024295df932fb09b4c9aa63d600"
+    "revision": "9f1683b8ceda973e80f52ae4396fb31b"
   },
   {
     "url": "src/css/app.css",
